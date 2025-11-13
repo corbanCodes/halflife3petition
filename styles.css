@@ -1,6 +1,20 @@
 :root{
-  --bg:#0c0d0f; --panel:#14161a; --muted:#7e8695; --text:#eaeef6; --brand:#ff6b00; --accent:#00ffd1;
+  --bg:#0c0d0f; --panel:#14161a; --muted:#7e8695; --text:#eaeef6; --brand:#ff6b00; --hl-orange:#ff8c1a; --accent:#00ffd1;
 }
+#intro{position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:radial-gradient(1600px 1000px at 50% -20%, #1b2027 0%, transparent 70%), var(--bg); z-index:50; transition:opacity .6s ease, visibility .6s ease}
+.intro-inner{text-align:center; padding:24px; width:100%; max-width:960px; min-height:400px; display:flex; flex-direction:column; align-items:center; justify-content:center; opacity:0}
+.intro-inner.ready{opacity:1; transition:opacity .4s ease}
+#intro h1{font-size: clamp(40px, 8vw, 72px); margin:0 0 24px; line-height:1.1; font-weight:800; min-height:1.2em}
+.intro-logo{width: clamp(80px, 15vw, 140px); height:auto; margin:0 0 24px; opacity:0; transition:opacity .6s ease}
+.intro-logo.show{opacity:1}
+#intro p{color:var(--muted); font-size: clamp(16px, 2.4vw, 22px); margin:0 0 32px; font-weight:400; min-height:1.4em}
+#intro.hide{opacity:0; visibility:hidden; pointer-events:none}
+.enter-btn{background:var(--brand); color:#000; border:none; padding:14px 48px; border-radius:12px; font-size:18px; font-weight:700; cursor:pointer; transition:.2s; margin-top:8px}
+.enter-btn:hover{transform:scale(1.05); filter:brightness(1.1)}
+@keyframes fadeInUp { from { opacity:0; transform:translateY(20px) } to { opacity:1; transform:none } }
+
+.reveal-enter{opacity:0; transform:translateY(8px)}
+.reveal-enter.show{opacity:1; transform:none; transition:opacity .5s ease, transform .5s ease}
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
@@ -10,13 +24,22 @@ body{
              radial-gradient(800px 600px at 100% 0%, #13161b 0%, transparent 60%), var(--bg);
   color:var(--text);
 }
-.site-header{padding:48px 24px 16px; text-align:center}
-.site-header h1{margin:0; font-size:40px; letter-spacing:0.5px}
-.site-header .tag{margin:8px 0 0; color:var(--muted)}
+.site-header{position:relative; padding:48px 24px 24px; text-align:center}
+.header-btn{position:absolute; top:24px; right:24px}
+.header-content{max-width:1100px; margin:0 auto}
+.site-header h1{margin:0 0 20px; font-size:clamp(32px, 6vw, 48px); letter-spacing:0.5px; line-height:1.2; font-weight:800}
+.header-logo-center{width:clamp(64px, 10vw, 96px); height:auto; margin:0 auto 20px; display:block}
+.site-header .tag{margin:0; color:var(--muted); font-size:clamp(14px, 2.2vw, 18px)}
+.btn.hl-orange{background:transparent; color:var(--hl-orange); border:1px solid var(--hl-orange); white-space:nowrap}
+.btn.hl-orange:hover{background:rgba(255,140,26,.1)}
+@media (max-width:640px){.header-btn{position:static; margin:0 auto 16px; display:block}; .site-header{padding-top:24px}}
 .container{max-width:1100px; margin:0 auto; padding:0 24px 64px; display:grid; gap:24px}
-.panel{background:var(--panel); border:1px solid #1f232b; border-radius:14px; padding:20px}
-.panel h2{margin:0 0 12px}
-.panel-head{display:flex; align-items:center; justify-content:space-between}
+.panel{background:rgba(20,22,26,.5); backdrop-filter:blur(12px); border:1px solid rgba(255,140,26,.15); border-radius:14px; padding:24px; transition:max-height .3s ease, opacity .3s ease}
+.panel.collapsed{max-height:0; padding:0 24px; overflow:hidden; opacity:.0; border-color:transparent}
+.panel h2{margin:0 0 16px; font-size:clamp(20px, 3vw, 24px)}
+.mural-panel{position:relative; padding-top:48px}
+.mural-heading{text-align:center; margin:0 0 24px !important}
+#refresh{position:absolute; top:20px; right:20px}
 
 .petition-form{display:grid; gap:12px}
 .petition-form label{display:grid; gap:6px; font-size:14px}
@@ -28,7 +51,9 @@ body{
 @media (max-width:720px){.petition-form .row{grid-template-columns:1fr}}
 .btn{background:var(--brand); color:black; border:none; padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer}
 .btn:hover{filter:brightness(1.06)}
-.link{background:none; color:var(--accent); border:none; padding:6px 8px; cursor:pointer}
+.link{background:none; color:var(--accent); border:none; padding:6px 12px; cursor:pointer; font-size:14px; border-radius:8px; transition:.2s}
+.link.hl-orange{color:var(--hl-orange)}
+.link.hl-orange:hover{background:rgba(255,140,26,.1)}
 .note{color:var(--muted); font-size:12px}
 .hidden{display:none}
 
@@ -52,3 +77,10 @@ body{
 .media iframe{width:100%; border:none; border-radius:10px; background:#000; aspect-ratio:16/9}
 .media img{display:block; width:100%; height:auto; max-height:70vh; border:none; border-radius:10px; background:#000; object-fit:contain}
 .avatar{display:grid; place-items:center; background:#151922; color:#9aa3b7; font-weight:800; font-size:22px}
+
+/* Audio floating button */
+.audio-btn{position:fixed; right:16px; bottom:16px; width:44px; height:44px; border-radius:50%; background:#1a1f2b; color:#fff; border:1px solid #2a3040; cursor:pointer; box-shadow:0 6px 20px rgba(0,0,0,.35)}
+.audio-btn[aria-pressed="true"]{background:var(--brand); color:#000}
+
+/* Typewriter base (JS will reveal letters) */
+.typewriter{visibility:visible}

@@ -6,17 +6,29 @@
     <title>Half-Life 3 Petition</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=block" rel="stylesheet">
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
+    <div id="intro" aria-hidden="true">
+      <div class="intro-inner">
+        <h1 id="intro-title" aria-label="Half-Life 3 Petition"></h1>
+        <img src="/Half-Life-logo.png" alt="Lambda logo" class="intro-logo" id="intro-logo" />
+        <p id="intro-tag" aria-label="Add your memory from Half-Life."></p>
+        <button id="enter-btn" class="enter-btn">Enter</button>
+      </div>
+    </div>
     <header class="site-header">
-      <h1>Half‑Life 3 Petition</h1>
-      <p class="tag">Add your memory from Half‑Life 1 & 2, and sign for HL3.</p>
+      <button id="toggle-form" class="btn hl-orange header-btn" type="button">Sign the Petition</button>
+      <div class="header-content">
+        <h1 id="title-typer">Half‑Life 3 Petition</h1>
+        <img src="/Half-Life-logo.png" alt="Lambda" class="header-logo-center" />
+        <p id="tag-typer" class="tag">Add your memory from Half‑Life.</p>
+      </div>
     </header>
 
     <main class="container">
-      <section class="panel">
+      <section id="form-section" class="panel collapsed" aria-expanded="false">
         <h2>Sign the Petition</h2>
         <form name="hl3-submissions" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thankyou.html" class="petition-form">
           <input type="hidden" name="form-name" value="hl3-submissions" />
@@ -50,15 +62,16 @@
         </form>
       </section>
 
-      <section class="panel">
-        <div class="panel-head">
-          <h2>The Mural</h2>
-          <button id="refresh" class="link">Refresh</button>
-        </div>
+      <section class="panel mural-panel">
+        <h2 class="mural-heading">The Mural</h2>
+        <button id="refresh" class="link hl-orange">Refresh</button>
         <div id="mural" class="mural-grid" aria-live="polite"></div>
         <div id="sentinel" aria-hidden="true"></div>
       </section>
     </main>
+
+    <audio id="bg-audio" src="/row.mp3" loop preload="auto"></audio>
+    <button id="audio-toggle" class="audio-btn" aria-pressed="false" title="Toggle audio">🔈</button>
 
     <div id="modal" class="modal" aria-hidden="true">
       <div class="modal-backdrop" data-close></div>
