@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Half-Life 3 Petition</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <h1>Half‑Life 3 Petition</h1>
+      <p class="tag">Add your memory from Half‑Life 1 & 2, and sign for HL3.</p>
+    </header>
+
+    <main class="container">
+      <section class="panel">
+        <h2>Sign the Petition</h2>
+        <form name="hl3-submissions" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thankyou.html" class="petition-form">
+          <input type="hidden" name="form-name" value="hl3-submissions" />
+          <p class="hidden">
+            <label>Don’t fill this out if you're human: <input name="bot-field" /></label>
+          </p>
+
+          <label>
+            <span>Name / Alias</span>
+            <input type="text" name="name" placeholder="Gordon Freeman" required />
+          </label>
+
+          <label>
+            <span>Your Story</span>
+            <textarea name="story" placeholder="Share your Half‑Life memory and why you want HL3…" rows="5" required></textarea>
+          </label>
+
+          <div class="row">
+            <label>
+              <span>Imgur Link (optional)</span>
+              <input type="url" name="imgur" placeholder="https://imgur.com/a/... or https://i.imgur.com/abc123.jpg" />
+            </label>
+            <label>
+              <span>YouTube URL (optional)</span>
+              <input type="url" name="video" placeholder="https://www.youtube.com/watch?v=..." />
+            </label>
+          </div>
+
+          <button type="submit" class="btn">Submit</button>
+          <p class="note">Submissions are processed by Netlify Forms on deploy.</p>
+        </form>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>The Mural</h2>
+          <button id="refresh" class="link">Refresh</button>
+        </div>
+        <div id="mural" class="mural-grid" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <div id="modal" class="modal" aria-hidden="true">
+      <div class="modal-backdrop" data-close></div>
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <button class="modal-close" aria-label="Close" data-close>&times;</button>
+        <h3 id="modal-title"></h3>
+        <p id="modal-story" class="story"></p>
+        <div id="modal-media" class="media"></div>
+      </div>
+    </div>
+
+    <script src="/script.js" defer></script>
+  </body>
+</html>
