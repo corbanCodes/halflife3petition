@@ -6,6 +6,13 @@ const modalTitle = document.getElementById("modal-title");
 const modalStory = document.getElementById("modal-story");
 const modalMedia = document.getElementById("modal-media");
 const refreshBtn = document.getElementById("refresh");
+const sentinel = document.getElementById("sentinel");
+
+// Pagination state for infinite scroll
+let page = 1;
+const pageSize = 60; // 50–100 at a time
+let loading = false;
+let reachedEnd = false;
 
 refreshBtn?.addEventListener("click", () => loadStories());
 modalEl?.addEventListener("click", (e) => {
@@ -107,13 +114,14 @@ function tileThumb(entry){
   return c.toDataURL();
 }
 
-function renderMural(entries){
-  muralEl.innerHTML = "";
+function appendToMural(entries){
   if (!entries || !entries.length){
-    const empty = document.createElement("p");
-    empty.className = "note";
-    empty.textContent = "No stories yet. Be the first to sign!";
-    muralEl.appendChild(empty);
+    if (muralEl.children.length === 0){
+      const empty = document.createElement("p");
+      empty.className = "note";
+      empty.textContent = "No stories yet. Be the first to sign!";
+      muralEl.appendChild(empty);
+    }
     return;
   }
   entries.forEach((entry) => {
@@ -155,7 +163,7 @@ function renderMural(entries){
 
 async function fetchStories(){
   try{
-    const res = await fetch(API_URL, { headers: { "cache-control": "no-cache" }});
+    const res = await fetch(`${API_URL}?page=${page}&per_page=${pageSize}`, { headers: { "cache-control": "no-cache" }});
     if (!res.ok) throw new Error("Bad response");
     return await res.json();
   }catch(e){
@@ -167,10 +175,35 @@ async function fetchStories(){
   }
 }
 
-async function loadStories(){
+async function loadMore(){
+  if (loading || reachedEnd) return;
+  loading = true;
   const entries = await fetchStories();
-  renderMural(entries);
+  if (!entries || entries.length === 0){
+    reachedEnd = true;
+  } else {
+    appendToMural(entries);
+    page += 1;
+  }
+  loading = false;
+}
+
+// Refresh resets the mural and pagination
+refreshBtn?.addEventListener("click", () => {
+  muralEl.innerHTML = "";
+  page = 1; reachedEnd = false; loading = false;
+  loadMore();
+});
+
+// IntersectionObserver to trigger infinite loading
+if (sentinel) {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) loadMore();
+    });
+  }, { rootMargin: "400px 0px" });
+  io.observe(sentinel);
 }
 
 // Initial load
-loadStories();
+loadMore();

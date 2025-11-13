@@ -16,7 +16,8 @@ exports.handler = async (event) => {
 
     const params = event?.queryStringParameters || {};
     const targetFormName = (params.form || "hl3-submissions").toString();
-    const limit = Math.min(parseInt(params.limit || "100", 10), 500) || 100;
+    const limit = Math.min(parseInt(params.limit || params.per_page || "100", 10), 100) || 100;
+    const page = Math.max(parseInt(params.page || "1", 10), 1);
 
     // Build forms list URL; optionally scope to specific site
     const base = siteId
@@ -39,7 +40,7 @@ exports.handler = async (event) => {
       };
     }
 
-    const subsUrl = `https://api.netlify.com/api/v1/forms/${form.id}/submissions?access_token=${apiKey}&per_page=${limit}`;
+    const subsUrl = `https://api.netlify.com/api/v1/forms/${form.id}/submissions?access_token=${apiKey}&per_page=${limit}&page=${page}`;
     const subsRes = await fetch(subsUrl);
     if (!subsRes.ok) {
       const txt = await subsRes.text();
@@ -49,12 +50,15 @@ exports.handler = async (event) => {
 
     const sanitized = submissions.map(s => ({ data: s.data || {} }));
 
+    // Netlify includes pagination via Link headers. We can forward minimal hints.
     return {
       statusCode: 200,
       headers: {
         "content-type": "application/json",
         "cache-control": "no-store",
-        "access-control-allow-origin": "*"
+        "access-control-allow-origin": "*",
+        "x-page": String(page),
+        "x-per-page": String(limit)
       },
       body: JSON.stringify(sanitized)
     };

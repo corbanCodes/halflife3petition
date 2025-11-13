@@ -44,9 +44,11 @@ body{
 .modal{position:fixed; inset:0; display:none}
 .modal.show{display:block}
 .modal-backdrop{position:absolute; inset:0; background:rgba(0,0,0,.6)}
-.modal-card{position:relative; max-width:820px; margin:6vh auto; background:#0f1115; border:1px solid #272b36; border-radius:14px; padding:18px}
+.modal-card{position:relative; max-width:820px; margin:6vh auto; background:#0f1115; border:1px solid #272b36; border-radius:14px; padding:18px; max-height:90vh; overflow:auto; -webkit-overflow-scrolling:touch}
 .modal-close{position:absolute; right:10px; top:8px; background:none; border:none; color:#bfc5d5; font-size:28px; cursor:pointer}
 .story{white-space:pre-wrap; color:#dfe5f3}
 .media{margin-top:12px; display:grid; gap:10px}
-.media iframe,.media img{width:100%; border:none; border-radius:10px; background:#000; aspect-ratio:16/9; object-fit:cover}
+/* Iframes keep 16:9, images should fully fit (no crop) */
+.media iframe{width:100%; border:none; border-radius:10px; background:#000; aspect-ratio:16/9}
+.media img{display:block; width:100%; height:auto; max-height:70vh; border:none; border-radius:10px; background:#000; object-fit:contain}
 .avatar{display:grid; place-items:center; background:#151922; color:#9aa3b7; font-weight:800; font-size:22px}
