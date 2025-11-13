@@ -71,6 +71,15 @@ toggleFormBtn?.addEventListener("click", () => {
   formSection?.setAttribute("aria-expanded", String(!isCollapsed));
 });
 
+// Add timestamp to prevent duplicate submission blocking
+const petitionForm = document.querySelector('form[name="hl3-submissions"]');
+petitionForm?.addEventListener("submit", () => {
+  const timestampField = document.getElementById("timestamp");
+  if (timestampField) {
+    timestampField.value = new Date().toISOString();
+  }
+});
+
 // Character-by-character typing animation
 function typeCharacters(element, text, delay = 50) {
   return new Promise(resolve => {
